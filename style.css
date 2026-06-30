@@ -1,0 +1,666 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: radial-gradient(circle at center, #0b2a6f, #041a3a);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* ATM 본체 */
+#app {
+  width: 1200px;
+  height: 760px;
+  position: relative;
+  overflow: hidden;
+
+  border-radius: 34px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #eef1f5 0%,
+      #dde3eb 35%,
+      #cbd3de 70%,
+      #bcc5d0 100%
+    );
+
+  border: 10px solid #6a7685;
+
+  box-shadow:
+    0 35px 70px rgba(0,0,0,.45),
+    inset 0 2px 0 rgba(255,255,255,.8),
+    inset 0 -8px 15px rgba(0,0,0,.12);
+}
+
+/* 화면 */
+.screen {
+  outline: 2px solid rgba(255,255,255,.35);
+outline-offset: -10px;
+
+  display: none;
+
+  width: calc(100% - 80px);
+  height: calc(100% - 150px);
+
+  margin: 110px auto 40px;
+
+  background:linear-gradient(
+180deg,
+#fdfdfd,
+#eef3f8
+);
+
+border:12px solid #171717;
+
+border-radius:24px;
+
+box-shadow:
+inset 0 2px 3px rgba(255,255,255,.7),
+inset 0 -8px 15px rgba(0,0,0,.08),
+0 10px 25px rgba(0,0,0,.2);
+
+  border-radius: 24px;
+
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  box-sizing: border-box;
+  position: relative;
+overflow: hidden;
+}
+
+.active {
+  display: flex;
+}
+
+/* =========================
+   버튼 (ATM 기계 느낌)
+========================= */
+button {
+background: linear-gradient(
+180deg,
+#4b9dff,
+#2b73e0
+);
+border: 1px solid rgba(255,255,255,.35);
+
+box-shadow:
+0 6px 0 #184e9f,
+0 12px 20px rgba(0,0,0,.18);
+
+  width: 330px;
+  height: 82px;
+  margin: 28px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #2f80ff, #1b5edc);
+  color: white;
+  font-size:30px;
+  font-weight:800;
+  letter-spacing:1px;
+  box-shadow: 0 6px 0 #123a8a;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #123a8a;
+  transform: translateY(3px);
+box-shadow: 0 2px 0 #1c5d9b;
+}
+
+/* =========================
+   시작 화면
+========================= */
+.bank-title {
+  font-size: 95px;
+  font-weight: 900;
+  color: #0b2a6f;
+  margin-bottom: 10px;
+}
+
+.sub-text {
+  font-size: 24px;
+  color: #555;
+  margin-bottom: 45px;
+}
+
+/* =========================
+   금액 버튼
+========================= */
+.amount-box {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.amount-box.row {
+  flex-direction: row;
+}
+
+/* =========================
+   비밀번호
+========================= */
+#pw {
+    font-size:62px;
+    font-weight:700;
+    letter-spacing:18px;
+    color: #0b2a6f;
+}
+
+.pw-layout {
+  display: flex;
+  width: 85%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pw-left {
+  text-align: left;
+}
+
+/* =========================
+   키패드
+========================= */
+#keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 12px;
+}
+
+#keypad button {
+  width: 80px;
+  height: 60px;
+  background: #e9eef7;
+  color: #0b2a6f;
+  border-radius: 10px;
+  font-weight: bold;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+#keypad button:active {
+  background: #d7e3ff;
+}
+
+/* =========================
+   카드
+========================= */
+.atm {
+  position: relative;
+}
+
+.slot {
+  width: 240px;
+  height: 18px;
+  background: #111;
+  border-radius: 20px;
+  margin: 25px auto;
+  box-shadow: inset 0 0 10px black;
+}
+
+#cardImg {
+  width: 320px;
+  height: 190px;
+  background: linear-gradient(135deg, #0f2d7a, #1d4ed8);
+  border-radius: 20px;
+  color: white;
+  position: absolute;
+  top: 110px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.35);
+}
+
+.chip {
+  width: 52px;
+  height: 40px;
+  background: gold;
+  border-radius: 6px;
+}
+
+/* 카드 애니메이션 */
+.card-move {
+  animation: cardMove 3s infinite;
+}
+
+@keyframes cardMove {
+  0% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(120px); opacity: 0.3; }
+  100% { transform: translateX(-50%) translateY(0); }
+}
+
+/* =========================
+   로딩
+========================= */
+.bar {
+  width: 520px;
+  height: 20px;
+  border-radius: 20px;
+  border: 2px solid #0b2a6f;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #39ff14, #00ff88);
+  animation: load 3s linear infinite;
+}
+
+@keyframes load {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* =========================
+   엔딩
+========================= */
+.ending-title {
+  font-size: 70px;
+  font-weight: 900;
+  color: #0b2a6f;
+}
+
+.ending-text {
+  font-size: 22px;
+  color: #333;
+  margin-top: 10px;
+}
+
+ /* =========================
+   🔥 FINAL POLISH (ATM 2.0 완성 디테일)
+========================= */
+
+/* 시작 화면 안내문 */
+.sub-text {
+  text-align: center;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+/* 금액 선택 중앙 정렬 개선 */
+.amount-box.row {
+  justify-content: center;
+  align-items: center;
+}
+
+/* 버튼 hover (ATM 반응감 강화) */
+button:hover { transform: translateY(-2px);
+  transform: scale(1.03);
+}
+
+/* 비밀번호 화면 좌우 패딩 */
+.pw-layout {
+  padding: 20px 40px;
+}
+
+/* 키패드 살짝 더 ATM 느낌 */
+#keypad button {
+  transition: 0.1s;
+}
+
+#keypad button:active {
+  transform: scale(0.95);
+  background: #cfe0ff;
+}
+
+/* 카드 슬롯 현실감 강화 */
+.slot {
+  background: #050505;
+  height: 22px;
+  box-shadow: inset 0 0 10px black;
+  
+}
+
+.slot::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+    top:6px;
+
+    transform:translateX(-50%);
+
+    width:0;
+
+    height:4px;
+
+    background:#39ff14;
+
+    border-radius:5px;
+
+    transition:.3s;
+
+}
+
+/* 카드 살짝 더 3D 느낌 */
+#cardImg {
+  transform: translateX(-50%) perspective(600px);
+  transform-origin: center;
+}
+
+/* 카드 움직임 부드럽게 */
+.card-move {
+  animation: cardMove 3s infinite ease-in-out;
+}
+
+/* 로딩 바 glow 효과 */
+.progress {
+  box-shadow: 0 0 10px #39ff14;
+}
+
+/* 엔딩 감성 강화 */
+.ending-title {
+  font-size: 80px;
+  letter-spacing: 2px;
+}
+
+.ending-text {
+  max-width: 650px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+ /* 🔊 버튼 눌림 더 현실감 */
+button:active {
+  transform: translateY(3px) scale(0.98);
+}
+
+/* 💳 카드 진짜 ATM 느낌 */
+#cardImg {
+  transition: all 0.3s ease;
+}
+
+/* 💥 화면 전환 느낌 강화 */
+.screen { padding: 80px 60px 60px;
+box-sizing: border-box;
+box-sizing:border-box;
+  transition: opacity 0.4s ease;
+}
+
+/* 🟢 로딩 glow */
+.progress {
+  box-shadow: 0 0 15px #39ff14;
+}
+
+@keyframes cardInsert {
+
+    0%{
+        transform:translateX(-50%) translateY(0);
+    }
+
+    35%{
+        transform:translateX(-50%) translateY(-8px);
+    }
+
+    60%{
+        transform:translateX(-50%) translateY(15px);
+    }
+
+    100%{
+        transform:translateX(-50%) translateY(-120px);
+        opacity:0;
+    }
+
+}
+
+.card-move{
+
+    animation:cardInsert 2.5s forwards ease-in-out;
+
+}
+
+.atm-header{
+  letter-spacing: 2px;
+font-weight: 700;
+text-transform: uppercase;
+box-shadow: inset 0 -2px 8px rgba(0,0,0,.15); 
+
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:95px;
+
+    background:linear-gradient(
+        180deg,
+        #0e55d7,
+        #0a43b1
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    box-shadow:
+        inset 0 -4px rgba(0,0,0,.2);
+}
+
+.atm-logo{
+
+    color:white;
+
+    font-size:42px;
+
+    font-weight:900;
+
+    letter-spacing:3px;
+
+    text-shadow:0 2px 5px rgba(0,0,0,.35);
+}
+
+/* =========================
+   STEP 2 : LCD FRAME
+========================= */
+.screen::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+left:0;
+
+width:100%;
+height:120px;
+
+background:linear-gradient(
+180deg,
+rgba(255,255,255,.28),
+transparent
+);
+
+pointer-events:none;
+
+border-radius:20px;
+}
+
+.welcome-logo{
+
+    font-size:70px;
+
+    margin-bottom:20px;
+
+}
+
+.bank-title{
+
+    margin-top:0;
+
+    margin-bottom:20px;
+
+}
+
+.sub-text{
+
+    line-height:1.7;
+
+    text-align:center;
+
+    margin-bottom:55px;
+
+}
+
+.screen h2{
+    font-size:56px;
+    font-weight:900;
+    color:#173f8a;
+    margin-bottom:45px;
+    letter-spacing:2px;
+}
+
+.screen button{
+    margin-top:20px;
+}
+
+#card {
+    justify-content: flex-start;
+    padding-top: 40px;
+}
+
+#card h2{
+    margin-bottom: 20px;
+}
+
+.atm{
+    margin-top: -20px;
+}
+
+.bank{
+
+    font-size:24px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    margin-bottom:18px;
+
+}
+
+.number{
+
+    margin-top:35px;
+
+    font-size:23px;
+
+    letter-spacing:3px;
+
+}
+
+.owner{
+
+    position:absolute;
+
+    bottom:18px;
+
+    left:20px;
+
+    font-size:18px;
+
+    opacity:.9;
+
+}
+
+.card-mark{
+    position:absolute;
+    right:20px;
+    bottom:18px;
+    font-size:16px;
+    font-weight:700;
+    opacity:.8;
+    letter-spacing:2px;
+}
+
+.slot.active::after{
+
+    width:170px;
+
+    box-shadow:0 0 15px #39ff14;
+
+}
+
+.loading-text{
+
+font-size:26px;
+
+margin-bottom:35px;
+
+color:#444;
+
+}
+
+.loading-sub{
+
+margin-top:35px;
+
+font-size:20px;
+
+color:#888;
+
+letter-spacing:1px;
+
+}
+
+.progress{
+
+border-radius:50px;
+
+}
+
+.number{
+    font-size:26px;
+    letter-spacing:4px;
+    font-weight:700;
+}
+
+.atm-info{
+
+    position:absolute;
+
+    right:20px;
+
+    top:8px;
+
+    color:white;
+
+    text-align:right;
+
+    font-size:15px;
+
+    line-height:1.35;
+
+    opacity:.9;
+
+    font-weight:600;
+
+}
+
+.bank-icon{
+
+    position:absolute;
+
+    left:30px;
+
+    color:white;
+
+    font-size:34px;
+
+}
+
+.ready{
+    color:#39ff14;
+    font-size:14px;
+    font-weight:700;
+    margin-top:1px;
+    letter-spacing:1px;
+    text-shadow:0 0 8px #39ff14;
+}

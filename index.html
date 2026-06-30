@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATM</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+</head>
+
+<body>
+
+<div id="app">
+  <div class="atm-header">
+
+    <div class="bank-icon">🏦</div>
+
+    <div class="atm-logo">
+        SYCI BANK
+    </div>
+
+    <div class="atm-info">
+        <div id="atmNo"></div>
+        <div id="atmTime"></div>
+        <div class="ready">● READY</div>
+    </div>
+
+</div>
+
+  <!-- 1 시작 -->
+<section id="welcome" class="screen active">
+
+    <div class="welcome-logo">
+        💝
+    </div>
+
+    <h1 class="bank-title">
+        호성,정진 결혼기념일
+    </h1>
+
+    <p class="sub-text">
+        용돈 ATM 서비스를 이용하시려면<br>
+        아래 시작하기 버튼을 눌러주세요.
+    </p>
+
+    <button class="big-btn" onclick="goMenu()">
+        시작하기
+    </button>
+
+</section>
+  <!-- 2 메뉴 -->
+  <section id="menu" class="screen">
+    <h2>서비스 선택</h2>
+    <button onclick="goAmount()">용돈 인출</button>
+  </section>
+
+  <!-- 3 금액 -->
+  <section id="amount" class="screen">
+    <h2>금액 선택</h2>
+
+    <div class="amount-box row">
+  <button class="big-btn" onclick="goPassword()">100,000원</button>
+  <button class="big-btn" onclick="goPassword()">200,000원</button>
+  <button class="big-btn" onclick="goPassword()">300,000원</button>
+</div>
+
+  </section>
+
+  <!-- 4 비밀번호 -->
+  <section id="password" class="screen">
+
+  <div class="pw-layout">
+
+    <div class="pw-left">
+      <h2>비밀번호 입력</h2>
+      <div id="pw">○ ○ ○ ○</div>
+    </div>
+
+    <div class="pw-right">
+      <div id="keypad">
+        <button onclick="key(1)">1</button>
+        <button onclick="key(2)">2</button>
+        <button onclick="key(3)">3</button>
+        <button onclick="key(4)">4</button>
+        <button onclick="key(5)">5</button>
+        <button onclick="key(6)">6</button>
+        <button onclick="key(7)">7</button>
+        <button onclick="key(8)">8</button>
+        <button onclick="key(9)">9</button>
+        <button onclick="clearPw()">←</button>
+        <button onclick="key(0)">0</button>
+        <button onclick="confirmPw()">확인</button>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+  
+  <!-- 5 카드 -->
+  <section id="card" class="screen">
+
+    <h2>카드를 넣어주세요</h2>
+
+    <div class="atm">
+
+      <div class="slot"></div>
+
+      <div id="cardImg">
+  <div class="bank">SYCI CARD</div>
+  <div class="chip"></div>
+  <div class="number">1234 5678 9012 3456</div>
+  <div class="owner">USER</div>
+  <div class="card-mark">ANNIVERSARY</div>
+</div>
+
+    </div>
+
+  </section>
+
+  <!-- 6 로딩 -->
+  <section id="loading" class="screen">
+    <h2>거래를 처리하고 있습니다.</h2>
+
+<p class="loading-text">
+카드를 빼지 마십시오.
+</p>
+
+<div class="bar">
+    <div class="progress"></div>
+</div>
+
+<p class="loading-sub">
+잠시만 기다려 주세요...
+</p>
+  </section>
+
+   <!-- 7 엔딩 -->
+  <section id="ending" class="screen">
+    <h1 class="ending-title">🎉 용돈 지급 완료 🎉</h1>
+    <p class="ending-text">
+      돈보다 더 소중한 것은 함께한 19년 입니다. 두 분의 사랑을 응원합니다!
+    </p>
+  </section>
+
+</div>
+
+<!-- 🔊 효과음 (여기가 핵심 위치) -->
+<audio id="clickSound" preload="auto">
+  <source src="https://actions.google.com/sounds/v1/cartoon/pop.ogg" type="audio/ogg">
+</audio>
+
+<audio id="successSound" preload="auto">
+  <source src="https://actions.google.com/sounds/v1/cartoon/magic_chime.ogg" type="audio/ogg">
+</audio>
+
+<script src="script.js"></script>
+</body>
+</html>
