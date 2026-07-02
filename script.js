@@ -1,42 +1,55 @@
-let audioUnlocked = false;
 let pw = "";
 
 /* =========================
-   AUDIO
+   SOUND (SAFE VERSION)
 ========================= */
 
-function unlockAudio() {
-  if (audioUnlocked) return;
+function safePlay(src, volume = 0.4){
+  const audioPool = {
+  click: new Audio("https://actions.google.com/sounds/v1/household/wood_plank_flicks.ogg"),
+  card: new Audio("https://actions.google.com/sounds/v1/impacts/metal_thud_and_scrape.ogg"),
+  loading: new Audio("https://actions.google.com/sounds/v1/ambiences/industrial_hum.ogg"),
+  success: new Audio("https://actions.google.com/sounds/v1/alarms/notification_success.ogg")
+};
 
-  const click = document.getElementById("clickSound");
-  if (!click) return;
+Object.values(audioPool).forEach(a=>{
+  a.preload = "auto";
+  a.volume = 0.5;
+});
+  function safePlay(type, volume = 0.4){
+  const audio = audioPool[type];
+  if(!audio) return;
 
-  click.play().then(() => {
-    click.pause();
-    click.currentTime = 0;
-  }).catch(()=>{});
+  try{
+    audio.pause();
+    audio.currentTime = 0;
+    audio.volume = volume;
 
-  audioUnlocked = true;
-}
-
-function playSound(id){
-  const s = document.getElementById(id);
-  if (!s) return;
-
-  try {
-    s.pause();
-    s.currentTime = 0;
-
-    const playPromise = s.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(()=>{});
+    const p = audio.play();
+    if(p !== undefined){
+      p.catch(()=>{});
     }
 
-  } catch(e) {}
+  } catch(e){}
+}
 }
 
-const clickSound = () => playSound("clickSound");
-const successSound = () => playSound("successSound");
+// ATM 효과음 4종
+function playClick(){
+  safePlay("click", 0.3);
+}
+
+function playCard(){
+  safePlay("card", 0.4);
+}
+
+function playLoading(){
+  safePlay("loading", 0.2);
+}
+
+function playSuccess(){
+  safePlay("https://actions.google.com/sounds/v1/alarms/notification_success.ogg", 0.5);
+}
 
 /* =========================
    SCREEN
@@ -55,18 +68,17 @@ function show(id){
 ========================= */
 
 function goMenu(){
-  unlockAudio();
-  clickSound();
+  playClick();
   show("menu");
 }
 
 function goAmount(){
-  clickSound();
+  playClick();
   show("amount");
 }
 
 function goPassword(){
-  clickSound();
+  playClick();
   show("password");
 }
 
@@ -75,7 +87,8 @@ function goPassword(){
 ========================= */
 
 function key(n){
-  clickSound();
+
+  playClick();
 
   if(pw.length < 4){
     pw += n;
@@ -84,17 +97,19 @@ function key(n){
 }
 
 function clearPw(){
-  clickSound();
+  playClick();
   pw = "";
   document.getElementById("pw").innerText = "○ ○ ○ ○";
 }
 
 /* =========================
-   FINAL
+   FINAL FLOW
 ========================= */
+
 function confirmPw(){
 
-  clickSound();
+  playClick();
+  playCard();
 
   show("card");
 
@@ -104,84 +119,80 @@ function confirmPw(){
     card.classList.add("card-move");
     const slot = document.querySelector(".slot");
 
-setTimeout(()=>{
-    slot.classList.add("active");
-},1600);
+    setTimeout(()=>{
+      slot.classList.add("active");
+    },1600);
 
-    // 카드 ATM 삽입 느낌
     setTimeout(()=>{
       card.style.transform = "translateX(-50%) translateY(120px)";
     }, 1500);
   }
 
-  // 로딩 화면
+  // 로딩 화면 + 소리
   setTimeout(()=>{
+    playLoading();
     show("loading");
   }, 2600);
 
-  // 완료 화면 + 효과음
+  // 엔딩 + 성공 소리
   setTimeout(()=>{
-    successSound();
+    playSuccess();
     show("ending");
   }, 5200);
 }
 
+/* =========================
+   ATM INFO
+========================= */
+
 window.addEventListener("load", () => {
 
-  const click = document.getElementById("clickSound");
-  const success = document.getElementById("successSound");
+  const atmNo = Math.floor(Math.random() * 999) + 1;
+  const atmNoEl = document.getElementById("atmNo");
 
-  if (click) {
-    click.volume = 0;
-    click.play().then(()=>{
-      click.pause();
-      click.currentTime = 0;
-      click.volume = 1;
-    }).catch(()=>{});
+  if(atmNoEl){
+    atmNoEl.innerText = `ATM NO.${String(atmNo).padStart(3,"0")}`;
   }
 
-  if (success) {
-    success.volume = 0;
-    success.play().then(()=>{
-      success.pause();
-      success.currentTime = 0;
-      success.volume = 1;
-    }).catch(()=>{});
-  }
+  updateATMTime();
+  setInterval(updateATMTime,1000);
 });
 
-// =========================
-// ATM 시간 표시
-// =========================
-// ATM 번호 랜덤 생성 (처음 한 번만)
-const atmNo = Math.floor(Math.random() * 999) + 1;
-
-const atmNoEl = document.getElementById("atmNo");
-
-if(atmNoEl){
-    atmNoEl.innerText = `ATM NO.${String(atmNo).padStart(3,"0")}`;
-}
+/* =========================
+   TIME
+========================= */
 
 function updateATMTime(){
 
-    const now = new Date();
+  const now = new Date();
 
-    const y = now.getFullYear();
-    const m = String(now.getMonth()+1).padStart(2,"0");
-    const d = String(now.getDate()).padStart(2,"0");
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,"0");
+  const d = String(now.getDate()).padStart(2,"0");
 
-    const h = String(now.getHours()).padStart(2,"0");
-    const min = String(now.getMinutes()).padStart(2,"0");
-    const s = String(now.getSeconds()).padStart(2,"0");
+  const h = String(now.getHours()).padStart(2,"0");
+  const min = String(now.getMinutes()).padStart(2,"0");
+  const s = String(now.getSeconds()).padStart(2,"0");
 
-    const time = document.getElementById("atmTime");
+  const time = document.getElementById("atmTime");
 
-    if(time){
-        time.innerHTML = `${y}.${m}.${d}<br>${h}:${min}:${s}`;
-    }
-
+  if(time){
+    time.innerHTML = `${y}.${m}.${d}<br>${h}:${min}:${s}`;
+  }
 }
 
-updateATMTime();
+let audioUnlocked = false;
 
-setInterval(updateATMTime,1000);
+function unlockAudio(){
+  if(audioUnlocked) return;
+
+  const test = new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg");
+
+  test.play().then(()=>{
+    test.pause();
+    test.currentTime = 0;
+    audioUnlocked = true;
+  }).catch(()=>{});
+}
+
+document.body.addEventListener("click", unlockAudio, { once: true });
